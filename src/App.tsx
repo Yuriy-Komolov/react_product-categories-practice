@@ -44,6 +44,11 @@ export const App: React.FC = () => {
     setSerchField('');
   };
 
+  const resetFilters = () => {
+    setSerchField('');
+    setSelectedUser('all');
+  };
+
   useEffect(() => {
     switch (selectedUser) {
       case 'all':
@@ -58,7 +63,7 @@ export const App: React.FC = () => {
           .filter(product => product.user?.name === selectedUser));
         break;
 
-      case serchField:
+      case serchField && selectedUser:
         setVisibleProducts(prev => prev
           .filter(product => product.user?.name === selectedUser));
         break;
@@ -160,7 +165,7 @@ export const App: React.FC = () => {
                 data-cy="ResetAllButton"
                 href="#/"
                 className="button is-link is-outlined is-fullwidth"
-
+                onClick={() => resetFilters()}
               >
                 Reset all filters
               </a>
