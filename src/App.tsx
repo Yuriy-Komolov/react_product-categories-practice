@@ -6,7 +6,6 @@ import usersFromServer from './api/users';
 import productsFromServer from './api/products';
 import categoriesFromServer from './api/categories';
 import { FullInfo } from './types/FullInfo';
-// import { User } from './types/User';
 
 export const App: React.FC = () => {
   const [products, setProducts] = useState<FullInfo[]>([]);
@@ -18,10 +17,11 @@ export const App: React.FC = () => {
     const getInfo = () => {
       const fullInfo = productsFromServer.map(product => {
         const category = categoriesFromServer
-          .find(currentCategory => currentCategory.id === product.categoryId);
+          .find(currentCategory => currentCategory.id === product.categoryId)
+          || null;
 
         const user = usersFromServer
-          .find(currentUser => currentUser.id === category?.ownerId);
+          .find(currentUser => currentUser.id === category?.ownerId) || null;
 
         return {
           ...product,
@@ -59,19 +59,14 @@ export const App: React.FC = () => {
         break;
 
       case selectedUser:
-        setVisibleProducts(products
-          .filter(product => product.user?.name === selectedUser));
-        break;
-
-      case serchField && selectedUser:
-        setVisibleProducts(prev => prev
+        setVisibleProducts(visibleProducts
           .filter(product => product.user?.name === selectedUser));
         break;
 
       default:
         break;
     }
-  }, [products, selectedUser, serchField]);
+  }, [products, selectedUser, serchField, visibleProducts]);
 
   return (
     <div className="section">
